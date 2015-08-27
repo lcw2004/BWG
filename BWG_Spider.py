@@ -34,9 +34,8 @@ def getProductListFromHomePage():
 
     htmlContent = r.content
 
-    htmlSource = html.fromstring(r.content)
+    htmlSource = html.fromstring(htmlContent)
     eleList = htmlSource.xpath('//*[@id="order-web20cart"]/div')
-    print len(eleList)
     for element in eleList:
         tableElementList = element.xpath("./table")
         if (len(tableElementList) > 0):
