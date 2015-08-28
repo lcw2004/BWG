@@ -6,15 +6,7 @@ import re
 from lxml import html
 
 
-def saveAsTemp(content, path):
-    f = open(path, 'w')
-    f.write(content)
-    f.close()
 
-
-def readFromFile(path):
-    f = open(path, 'r')
-    return f.read()
 
 
 def re_search(reg, text):

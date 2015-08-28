@@ -4,12 +4,13 @@
 from BWG_DB import BWGProductDao
 from common import Config
 from common.Mail import Email_Test_Sender
+from common import HtmlUtil
 
 def build_text(wantList):
     text = "可预订产品如下：\n"
     for pName in wantList:
         product = wantList.get(pName)
-        text += pName + "\n"
+        text += "<p>" + pName + "\n" + "</p><br>"
     return text
 
 if __name__ == "__main__":
@@ -31,7 +32,8 @@ if __name__ == "__main__":
             wantList[pName] = bwgProductDao.get(pName)
 
     # 构建邮件
-    text = build_text(wantList)
+    text = HtmlUtil.getMailHtml(wantList)
+    print text
 
     # 发送邮件
     mailSender = Email_Test_Sender(Config.MAIL_USERNAME, Config.MAIL_PASSWORD)

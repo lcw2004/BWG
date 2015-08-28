@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<h1>可预订产品如下：</h1>
+
+% for product in productList:
+<div>
+    <p>${product}</p>
+
+    <span>服务器信息：</span><br>
+    <span>RAM：</span>${productList.get(product).get('RAM')}<br>
+    <span>BW：</span>${productList.get(product).get('BW')}<br>
+    <span>HDD：</span>${productList.get(product).get('HDD')}<br>
+    <span>CPU：</span>${productList.get(product).get('CPU')}<br>
+
+    <span>价格：</span><br>
+    <span>年：</span>${productList.get(product).get('Cost_Year')}<br>
+    <span>半年：</span>${productList.get(product).get('Cost_Half_Year')}<br>
+    <span>季度：</span>${productList.get(product).get('Cost_Quarterly')}<br>
+    <span>月份：</span>${productList.get(product).get('Cost_Monthly')}<br>
+</div>
+% endfor
+</body>
+</html>
+
+
+
+
+

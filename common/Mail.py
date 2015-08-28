@@ -26,7 +26,7 @@ class Email_Test_Sender:
 
     def sendMsg(self, to, subject, text):
         # 组织邮件主体
-        msg = MIMEText(text)
+        msg = MIMEText(text, _subtype='html', _charset='UTF-8')
         msg["Subject"] = subject
         msg["From"] = self.userName
         msg["To"] = to
