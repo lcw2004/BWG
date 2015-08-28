@@ -30,6 +30,7 @@ url = "https://bandwagonhost.com/cart.php"
 def getProductListFromHomePage():
     pruductMap = {}
 
+    print u"开始爬取数据"
     r = requests.get(url)
 
     htmlContent = r.content
@@ -60,5 +61,6 @@ def getProductListFromHomePage():
             product["Cost_Year"] = re_search("(.*)USD Annually", priceContent)
 
             pruductMap[prudoctName] = product
+            print u"爬取到产品:", prudoctName
     return pruductMap
 
