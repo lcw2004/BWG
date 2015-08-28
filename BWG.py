@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from BWG_DB import BWGProductDao
+import BWG_Spider
 from common import Config
 from common.Mail import Email_Test_Sender
 from common import HtmlUtil
@@ -14,15 +15,15 @@ def build_text(wantList):
     return text
 
 if __name__ == "__main__":
-    # pruductList = BWG_Spider.getProductListFromHomePage()
+    pruductList = BWG_Spider.getProductListFromHomePage()
 
     # 保存数据库到数据库
-    # bwgProductDao = BWGProductDao()
-    # for key in pruductList:
-    #     if bwgProductDao.exicts(key):
-    #         bwgProductDao.update(pruductList[key])
-    #     else:
-    #         bwgProductDao.save(pruductList[key])
+    bwgProductDao = BWGProductDao()
+    for key in pruductList:
+        if bwgProductDao.exicts(key):
+            bwgProductDao.update(pruductList[key])
+        else:
+            bwgProductDao.save(pruductList[key])
 
     # 检查是否能预订，如果能预订加入到可预订列表
     bwgProductDao = BWGProductDao()

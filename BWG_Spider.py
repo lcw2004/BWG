@@ -4,9 +4,7 @@
 import requests
 import re
 from lxml import html
-
-
-
+from common import FileUtil
 
 
 def re_search(reg, text):
@@ -26,6 +24,7 @@ def getProductListFromHomePage():
     r = requests.get(url)
 
     htmlContent = r.content
+    FileUtil.saveAsTemp(htmlContent, "temp.html")
 
     htmlSource = html.fromstring(htmlContent)
     eleList = htmlSource.xpath('//*[@id="order-web20cart"]/div')
