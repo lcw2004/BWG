@@ -3,14 +3,14 @@
 
 import requests
 import re
-from lxml import html
 from common import FileUtil
+from BeautifulSoup import BeautifulSoup
 
 
-def re_search(reg, text):
+def re_search(reg, text, index):
     ram_re = re.search(reg, text)
     if ram_re:
-        ram = ram_re.group(1)
+        ram = ram_re.group(index)
         return ram.strip()
 
 
@@ -20,38 +20,51 @@ url = "https://bandwagonhost.com/cart.php"
 def getProductListFromHomePage():
     pruductMap = {}
 
-    # print u"开始爬取数据"
+    print u"开始爬取数据"
     r = requests.get(url)
 
     htmlContent = r.content
-    FileUtil.saveAsTemp(htmlContent, "temp.html")
 
-    htmlSource = html.fromstring(htmlContent)
-    eleList = htmlSource.xpath('//*[@id="order-web20cart"]/div')
-    for element in eleList:
-        tableElementList = element.xpath("./table")
-        if (len(tableElementList) > 0):
-            tableElement = element.xpath("./table")[0]
-            prudoctName = tableElement.xpath("./tr/td[1]/strong")[0].text_content()
-            prudoctInfo = tableElement.xpath("./tr/td[1]")[0].text_content()
-            priceContent = tableElement.xpath("./tr/td[2]")[0].text_content()
-            canOrder = tableElement.xpath("./tr/td[3]")[0].text_content()
+    soup = BeautifulSoup(htmlContent)
+    tableList = soup.findAll(attrs={'class': re.compile(r".*\bnoborders\b.*")})
+    for tb in tableList:
+        print "--------------------------------------"
+        productInfo = str(tb.contents[1].contents[1])
+        priceInfo = str(tb.contents[1].contents[3])
 
-            product = {}
-            product["prudoctName"] = prudoctName
+        product = {}
+        prudoctName = re_search("<strong>(.*)</strong>", productInfo, 1)
+        product["prudoctName"] = prudoctName
 
-            # 当按钮栏显示out of stock的时候表示不能预订
-            product["canOrder"] = 'out of stock' not in canOrder
-            product["RAM"] = re_search("RAM:(.*)", prudoctInfo)
-            product["HDD"] = re_search("HDD:(.*)", prudoctInfo)
-            product["CPU"] = re_search("CPU:(.*)", prudoctInfo)
-            product["BW"] = re_search("BW:(.*)", prudoctInfo)
-            product["Cost_Monthly"] = re_search("(.*)USD Monthly", priceContent)
-            product["Cost_Quarterly"] = re_search("(.*)USD Quarterly", priceContent)
-            product["Cost_Half_Year"] = re_search("(.*)USD Semi-Annually", priceContent)
-            product["Cost_Year"] = re_search("(.*)USD Annually", priceContent)
+        count = "0"
+        canOrder = False
+        if "<em>" in productInfo:
+            enInfo = re_search("<em>(.*)</em>", productInfo, 1)
+            if "(out of stock)" == enInfo:
+                # 如果em元素中包含out of stock，表示已经售完
+                canOrder = False
+                count = "0"
+            else:
+                # 如果em元素中包含5 avlivale，表示还剩余一定的数量
+                canOrder = True
+                count = enInfo
+        else:
+            canOrder = True
+            count = ""
 
-            pruductMap[prudoctName] = product
-            # print u"爬取到产品:", prudoctName
+        product["canOrder"] = canOrder
+        product["AvaliableCount"] = count
+        product["RAM"] = re_search("RAM:(.*)[<]", productInfo, 1)
+        product["HDD"] = re_search("HDD:(.*)[<]", productInfo, 1)
+        product["CPU"] = re_search("CPU:(.*)[<]", productInfo, 1)
+        product["BW"] = re_search("BW:(.*)[<]", productInfo, 1)
+        product["Cost_Monthly"] = re_search("[$](.*)USD Monthly", priceInfo, 1)
+        product["Cost_Quarterly"] = re_search("[$](.*)USD Quarterly", priceInfo, 1)
+        product["Cost_Half_Year"] = re_search("[$](.*)USD Semi-Annually", priceInfo, 1)
+        product["Cost_Year"] = re_search("[$](.*)USD Annually", priceInfo, 1)
+        pruductMap[prudoctName] = product
+        print product
+
+        print "--------------------------------------"
+
     return pruductMap
-

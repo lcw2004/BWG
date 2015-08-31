@@ -295,7 +295,7 @@ img {
 
 
 % for product in productList:
-    <h2>${product}</h2>
+    <h2>${product} - ${productList.get(product).get('AvaliableCount')}</h2>
     <h3>服务器信息</h3>
     <ul>
         <li>RAM：${productList.get(product).get('RAM')}</li>

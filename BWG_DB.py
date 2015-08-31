@@ -15,8 +15,8 @@ class BWGProductDao:
     # 保存产品
     def save(self, product):
         sql = '''
-            INSERT INTO Product ("prudoctName", "canOrder", "RAM", "HDD", "CPU", "BW", "Cost_Monthly", "Cost_Quarterly", "Cost_Half_Year", "Cost_Year")
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT INTO Product ("prudoctName", "canOrder", "RAM", "HDD", "CPU", "BW", "Cost_Monthly", "Cost_Quarterly", "Cost_Half_Year", "Cost_Year", "AvaliableCount")
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             '''
 
         cursor = self.connect.cursor()
@@ -29,7 +29,8 @@ class BWGProductDao:
                              product["Cost_Monthly"],
                              product["Cost_Quarterly"],
                              product["Cost_Half_Year"],
-                             product["Cost_Year"]])
+                             product["Cost_Year"],
+                             product["AvaliableCount"]])
         cursor.close()
         self.connect.commit()
 
@@ -37,7 +38,7 @@ class BWGProductDao:
     # 修改产品
     def update(self, product):
         sql = '''
-            UPDATE Product set canOrder=?, RAM=?, HDD=?, CPU=?, BW=?, Cost_Monthly=?, Cost_Quarterly=?, Cost_Half_Year=?, Cost_Year=?
+            UPDATE Product set canOrder=?, RAM=?, HDD=?, CPU=?, BW=?, Cost_Monthly=?, Cost_Quarterly=?, Cost_Half_Year=?, Cost_Year=?, AvaliableCount=?
             WHERE prudoctName = ?
             '''
 
@@ -51,6 +52,7 @@ class BWGProductDao:
                              product["Cost_Quarterly"],
                              product["Cost_Half_Year"],
                              product["Cost_Year"],
+                             product["AvaliableCount"],
                              product["prudoctName"]])
         cursor.close()
         self.connect.commit()
@@ -58,7 +60,7 @@ class BWGProductDao:
 
     # 根据产品名称查询
     def get(self, productName):
-        sql = 'SELECT prudoctName, canOrder, RAM, HDD, CPU, BW, Cost_Monthly, Cost_Quarterly, Cost_Half_Year, Cost_Year FROM Product WHERE prudoctName = ?'
+        sql = 'SELECT prudoctName, canOrder, RAM, HDD, CPU, BW, Cost_Monthly, Cost_Quarterly, Cost_Half_Year, Cost_Year, AvaliableCount FROM Product WHERE prudoctName = ?'
         cursor = self.connect.cursor()
         cursor.execute(sql, [productName])
 
@@ -75,6 +77,7 @@ class BWGProductDao:
             product["Cost_Quarterly"] = one[7]
             product["Cost_Half_Year"] = one[8]
             product["Cost_Year"] = one[9]
+            product["AvaliableCount"] = one[10]
         cursor.close()
         return product
 
@@ -97,7 +100,7 @@ class BWGProductDao:
 
     # 获取所有能预订的列表
     def query(self, canOrder):
-        sql = 'SELECT prudoctName, canOrder, RAM, HDD, CPU, BW, Cost_Monthly, Cost_Quarterly, Cost_Half_Year, Cost_Year FROM Product WHERE canOrder = ?'
+        sql = 'SELECT prudoctName, canOrder, RAM, HDD, CPU, BW, Cost_Monthly, Cost_Quarterly, Cost_Half_Year, Cost_Year, AvaliableCount FROM Product WHERE canOrder = ?'
         cursor = self.connect.cursor()
         cursor.execute(sql, [canOrder])
 
@@ -116,6 +119,7 @@ class BWGProductDao:
             product["Cost_Quarterly"] = one[7]
             product["Cost_Half_Year"] = one[8]
             product["Cost_Year"] = one[9]
+            product["AvaliableCount"] = one[10]
             products[one[0]] = product
         cursor.close()
         return products
