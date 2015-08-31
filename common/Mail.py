@@ -31,10 +31,10 @@ class Email_Test_Sender:
         msg["From"] = self.userName
         msg["To"] = to
 
-        print u"开始发送邮件"
+        # print u"开始发送邮件"
         print self.userName, " >>>> " + to
-        print u"邮件主题：", subject
-        print u"邮件内容：", text
+        # print u"邮件主题：", subject
+        # print u"邮件内容：", text
 
         # 获取邮箱对应的SMTP
         smtp = getSMTP(self.userName)
