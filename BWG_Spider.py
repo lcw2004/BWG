@@ -28,7 +28,7 @@ def getProductListFromHomePage():
     soup = BeautifulSoup(htmlContent)
     tableList = soup.findAll(attrs={'class': re.compile(r".*\bnoborders\b.*")})
     for tb in tableList:
-        print "--------------------------------------"
+        # print "--------------------------------------"
         productInfo = str(tb.contents[1].contents[1])
         priceInfo = str(tb.contents[1].contents[3])
 
@@ -63,8 +63,8 @@ def getProductListFromHomePage():
         product["Cost_Half_Year"] = re_search("[$](.*)USD Semi-Annually", priceInfo, 1)
         product["Cost_Year"] = re_search("[$](.*)USD Annually", priceInfo, 1)
         pruductMap[prudoctName] = product
-        print product
+        # print product
 
-        print "--------------------------------------"
+        # print "--------------------------------------"
 
     return pruductMap

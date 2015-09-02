@@ -8,12 +8,6 @@ from common.Mail import Email_Test_Sender
 from common import HtmlUtil
 import time
 
-def build_text(wantList):
-    text = "可预订产品如下：\n"
-    for pName in wantList:
-        product = wantList.get(pName)
-        text += "<p>" + pName + "\n" + "</p><br>"
-    return text
 
 if __name__ == "__main__":
 
@@ -38,21 +32,15 @@ if __name__ == "__main__":
             if bwgProductDao.canOrder(pName):
                 wantList[pName] = bwgProductDao.get(pName)
 
-                print "\t可预订产品：" + pName
+                print "\tCan order：" + pName
 
-        # 构建邮件
-        text = HtmlUtil.getMailHtml(wantList)
+        if len(wantList) > 0:
+            # 构建邮件
+            text = HtmlUtil.getMailHtml(wantList)
 
-        # 发送邮件
-        mailSender = Email_Test_Sender(Config.MAIL_USERNAME, Config.MAIL_PASSWORD)
-        mailSender.sendMsg(Config.MAIL_TO_QQ, "搬瓦工优惠", text)
+            # 发送邮件
+            mailSender = Email_Test_Sender(Config.MAIL_USERNAME, Config.MAIL_PASSWORD)
+            mailSender.sendMsg(Config.MAIL_USERNAME, "Bandwagonhost", text)
 
         count = count + 1
         time.sleep(Config.SPACE_TIME)
-
-
-
-
-
-
-

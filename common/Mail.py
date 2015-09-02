@@ -38,21 +38,21 @@ class Email_Test_Sender:
 
         # 获取邮箱对应的SMTP
         smtp = getSMTP(self.userName)
+        print "SMTP:", smtp
 
         # 发送邮件
         s = smtplib.SMTP(smtp, timeout=30, port=25)
         s.login(self.userName, self.password)
         s.sendmail(self.userName, to, msg.as_string())
         s.close()
+        print "Send Ok"
 
 
 def test_send_text():
-    userName = "lcw2004@163.com"
-    pwd = "2g1JLXI6lQ"
-    toQQ = "292232611@qq.com"
     text = """邮件内容"""
 
-    sender = Email_Test_Sender(userName, pwd)
-    sender.sendMsg(toQQ, "呵呵", text)
+    import Config
+    sender = Email_Test_Sender(Config.MAIL_USERNAME, Config.MAIL_PASSWORD)
+    sender.sendMsg(Config.MAIL_TO_QQ, "呵呵", text)
 
 # test_send_text()
