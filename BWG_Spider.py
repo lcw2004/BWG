@@ -20,7 +20,7 @@ url = "https://bandwagonhost.com/cart.php"
 def getProductListFromHomePage():
     pruductMap = {}
 
-    print u"开始爬取数据"
+    print "开始爬取数据"
     r = requests.get(url)
 
     htmlContent = r.content
